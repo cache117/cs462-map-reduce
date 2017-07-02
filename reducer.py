@@ -7,10 +7,22 @@
 #
 
 from operator import itemgetter
+
 import sys
+import re
+
+def get_stopwords():
+	stop_words = list()
+	with open("stop-words") as file:
+		for line in file:
+			for word in re.findall(r'\w+', line)
+				stop_words.append(word)
 
 # maps words to their counts
 word2count = {}
+
+# get list of stopwords
+stopwords = get_stopwords()
 
 # input comes from STDIN
 for line in sys.stdin:
@@ -22,6 +34,7 @@ for line in sys.stdin:
 	# convert count (currently a string) to int
 	try:
 		count = int(count)
+		
 		word2count[word] = word2count.get(word, 0) + count
 	except ValueError:
 		# count was not a number, so silently
@@ -29,7 +42,9 @@ for line in sys.stdin:
 		pass
 
 counted_words = word2count.items()
+counted_words.sort()
 
 # write the results to STDOUT (standard output)
 for word, count in counted_words:
 	print '%s\t%s'% (word, count)
+
