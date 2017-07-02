@@ -42,6 +42,7 @@ def get_word_counts():
 			# count was not a number, so silently
 			# ignore/discard this line
 			pass
+        return word2count
 
 def print_out_word_counts(counted_words):
 	# write the results to STDOUT (standard output)
