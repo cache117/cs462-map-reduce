@@ -18,34 +18,40 @@ def get_stopwords():
 			for word in re.findall(r'\w+', line):
 				stop_words.add(word)
         return stop_words
+		
+def get_word_counts():
+	# maps words to their counts
+	word2count = {}
 
-# maps words to their counts
-word2count = {}
+	# get list of stopwords
+	stop_words = get_stopwords()
+	
+	# input comes from STDIN
+	for line in sys.stdin:
+		# remove leading and trailing whitespace
+		line = line.strip()
 
-# get list of stopwords
-stop_words = get_stopwords()
+		# parse the input we got from mapper.py
+		word, count = line.split('\t', 1)
+		# convert count (currently a string) to int
+		try:
+			if word not in stop_words:
+				count = int(count)
+				word2count[word] = word2count.get(word, 0) + count
+		except ValueError:
+			# count was not a number, so silently
+			# ignore/discard this line
+			pass
 
-# input comes from STDIN
-for line in sys.stdin:
-	# remove leading and trailing whitespace
-	line = line.strip()
+def print_out_word_counts(counted_words):
+	# write the results to STDOUT (standard output)
+	for word, count in counted_words:
+		print '%s\t%s'% (word, count)
 
-	# parse the input we got from mapper.py
-	word, count = line.split('\t', 1)
-	# convert count (currently a string) to int
-	try:
-		if word not in stop_words:
-			count = int(count)
-			word2count[word] = word2count.get(word, 0) + count
-	except ValueError:
-		# count was not a number, so silently
-		# ignore/discard this line
-		pass
+word2count = get_word_counts()
 
 counted_words = word2count.items()
 counted_words.sort()
 
-# write the results to STDOUT (standard output)
-for word, count in counted_words:
-	print '%s\t%s'% (word, count)
+print_out_word_counts(counted_words)
 
