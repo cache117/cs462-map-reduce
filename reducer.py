@@ -17,6 +17,7 @@ def get_stopwords():
 		for line in file:
 			for word in re.findall(r'\w+', line):
 				stop_words.add(word)
+        return stop_words
 
 # maps words to their counts
 word2count = {}
