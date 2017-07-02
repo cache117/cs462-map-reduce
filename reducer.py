@@ -12,7 +12,7 @@ import sys
 import re
 
 def get_stopwords():
-	stop_words = list()
+	stop_words = set()
 	with open("stop-words") as file:
 		for line in file:
 			for word in re.findall(r'\w+', line):
@@ -22,7 +22,7 @@ def get_stopwords():
 word2count = {}
 
 # get list of stopwords
-stopwords = get_stopwords()
+stop_words = get_stopwords()
 
 # input comes from STDIN
 for line in sys.stdin:
@@ -33,9 +33,9 @@ for line in sys.stdin:
 	word, count = line.split('\t', 1)
 	# convert count (currently a string) to int
 	try:
-		count = int(count)
-		
-		word2count[word] = word2count.get(word, 0) + count
+		if word not in stop_words:
+			count = int(count)
+			word2count[word] = word2count.get(word, 0) + count
 	except ValueError:
 		# count was not a number, so silently
 		# ignore/discard this line
